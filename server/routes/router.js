@@ -12,4 +12,16 @@ router.get("/getproducts", async (req, res) => {
   }
 });
 
+//get individual data
+router.get("/getproductsone/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const individualdata = await Products.findOne({ id: id });
+    res.status(201).json(individualdata);
+  } catch (error) {
+    res.status(400).json(individualdata);
+    console.log("error" + error.message);
+  }
+});
+
 module.exports = router;
