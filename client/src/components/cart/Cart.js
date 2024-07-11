@@ -38,17 +38,20 @@ const Cart = () => {
 
   // add cart function
   const addtocart = async (id) => {
-    const check = await fetch(`/addcart/${id}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        inddata,
-      }),
-      credentials: "include",
-    });
+    const check = await fetch(
+      `https://amazon-server-sigma.vercel.app/addcart/${id}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          inddata,
+        }),
+        credentials: "include",
+      }
+    );
 
     const data1 = await check.json();
 
