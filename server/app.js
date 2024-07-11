@@ -10,9 +10,13 @@ const DefaultData = require("./defaultdata");
 const cors = require("cors");
 const router = require("./routes/router");
 
+app.use(express.json());
+app.use(cookieParser(""));
+app.use(cors());
+app.use(router);
+
 const port = 8005;
 
-// CORS configuration
 const corsOptions = {
   origin: "https://cloudamazon.vercel.app",
   credentials: true,
@@ -20,26 +24,17 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-// Middleware
-app.use(express.json());
-app.use(cookieParser(""));
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Preflight requests
+app.options("*", cors(corsOptions));
 
-// Routes
-app.use(router);
-
-// Test route
-app.get("*", (req, res) => {
+app.get("*", (req, res, next) => {
   res.status(200).json({
     message: "Connected to vercel app",
   });
 });
 
-// Start the server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`server is running on ${port}`);
 });
 
-// Initialize default data
 DefaultData();
