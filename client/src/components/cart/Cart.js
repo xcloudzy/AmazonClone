@@ -6,76 +6,92 @@ import { Logincontext } from "../context/ContextProvider";
 
 const Cart = () => {
   const { account, setAccount } = useContext(Logincontext);
-
-  const { id } = useParams("");
-
-  const history = useNavigate("");
-
-  const [inddata, setInddata] = useState([]);
-
-  const getinddata = async () => {
-    const res = await fetch(
-      `https://amazon-server-sigma.vercel.app/getproductsone/${id}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    const data = await res.json();
-
-    if (res.status !== 201) {
-      console.log("no data available");
-    } else {
-      setInddata(data);
-    }
-  };
+  const { id } = useParams();
+  const history = useNavigate();
+  const [inddata, setInddata] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setTimeout(getinddata, 1000);
+    getIndData();
   }, [id]);
 
-  // add cart function
-  const addtocart = async (id) => {
-    const check = await fetch(
-      `https://amazon-server-sigma.vercel.app/addcart/${id}`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          inddata,
-        }),
-        credentials: "include",
+  const getIndData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `https://amazon-server-sigma.vercel.app/getproductsone/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch product data");
       }
-    );
 
-    const data1 = await check.json();
-
-    if (check.status === 401 || !data1) {
-      alert("user invalid");
-    } else {
-      setAccount(data1);
-      history("/buynow");
+      const data = await res.json();
+      setInddata(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching individual product data:", error);
+      setError("Failed to fetch product data. Please try again later.");
+      setLoading(false);
     }
   };
+
+  const addtoCart = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `https://amazon-server-sigma.vercel.app/addcart/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ inddata }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to add item to cart");
+      }
+
+      const data = await res.json();
+      setAccount(data);
+      setLoading(false);
+      history("/buynow");
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+      setError("Failed to add item to cart. Please try again later.");
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div className="cart_section">
-      {inddata && Object.keys(inddata).length && (
+      {inddata && (
         <div className="cart_container">
           <div className="left_cart">
             <img src={inddata.url} alt="cart_img" />
             <div className="cart_btn">
-              <button
-                className="cart_btn1"
-                onClick={() => addtocart(inddata.id)}
-              >
+              <button className="cart_btn1" onClick={addtoCart}>
                 Add to Cart
               </button>
               <button className="cart_btn2">Buy Now</button>
