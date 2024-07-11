@@ -17,14 +17,15 @@ app.use(router);
 
 const port = 8005;
 
+// CORS configuration
 const corsOptions = {
-  origin: "https://cloudamazon.vercel.app",
+  origin: "https://cloudamazon.vercel.app", // Specific origin
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-app.use(cors(corsOptions));
+// Handle preflight requests
 app.options("*", cors(corsOptions));
 
 app.get("*", (req, res, next) => {

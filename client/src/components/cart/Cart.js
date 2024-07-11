@@ -19,7 +19,11 @@ const Cart = () => {
       `https://amazon-server-sigma.vercel.app/getproductsone/${id}`,
       {
         method: "GET",
-        headers: { "Content-type": "application/json" },
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       }
     );
     const data = await res.json();
