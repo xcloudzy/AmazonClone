@@ -19,9 +19,10 @@ const port = 8005;
 
 app.get("*", (req, res, next) => {
   res.status(200).json({
-    message: "bad request",
+    message: "Connected to vercel app",
   });
 });
+
 app.listen(port, () => {
   console.log(`server is running on ${port}`);
 });

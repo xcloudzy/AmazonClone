@@ -15,10 +15,13 @@ const Cart = () => {
 
   console.log(inddata);
   const getinddata = async () => {
-    const res = await fetch(`/getproductsone/${id}`, {
-      method: "GET",
-      headers: { "Content-type": "application/json" },
-    });
+    const res = await fetch(
+      `https://amazon-server-sigma.vercel.app/getproductsone/${id}`,
+      {
+        method: "GET",
+        headers: { "Content-type": "application/json" },
+      }
+    );
     const data = await res.json();
 
     if (res.status !== 201) {

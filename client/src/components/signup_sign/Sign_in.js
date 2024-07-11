@@ -27,7 +27,7 @@ const Sign_in = () => {
     e.preventDefault();
     const { email, password } = logdata;
 
-    const res = await fetch("/login", {
+    const res = await fetch("https://amazon-server-sigma.vercel.app/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

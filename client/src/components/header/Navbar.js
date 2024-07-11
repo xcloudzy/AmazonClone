@@ -11,14 +11,17 @@ const Navbar = () => {
   // console.log(account);
 
   const getdetailvaliduser = async () => {
-    const res = await fetch("/validuser", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    const res = await fetch(
+      "https://amazon-server-sigma.vercel.app/validuser",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
 
     const data = await res.json();
 

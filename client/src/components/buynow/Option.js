@@ -8,14 +8,17 @@ const Option = ({ deletedata, get }) => {
 
   const removedata = async (id) => {
     try {
-      const res = await fetch(`/remove${id}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const res = await fetch(
+        `https://amazon-server-sigma.vercel.app/remove${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
       const data = await res.json();
 
