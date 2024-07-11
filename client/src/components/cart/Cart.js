@@ -14,27 +14,23 @@ const Cart = () => {
   const [inddata, setInddata] = useState([]);
 
   const getinddata = async () => {
-    try {
-      const res = await fetch(
-        `https://amazon-server-sigma.vercel.app/getproductsone/${id}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
-      const data = await res.json();
-
-      if (res.status !== 201) {
-        console.log("no data available");
-      } else {
-        setInddata(data);
+    const res = await fetch(
+      `https://amazon-server-sigma.vercel.app/getproductsone/${id}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       }
-    } catch (error) {
-      console.error("Error fetching product data:", error);
+    );
+    const data = await res.json();
+
+    if (res.status !== 201) {
+      console.log("no data available");
+    } else {
+      setInddata(data);
     }
   };
 
@@ -44,32 +40,28 @@ const Cart = () => {
 
   // add cart function
   const addtocart = async (id) => {
-    try {
-      const check = await fetch(
-        `https://amazon-server-sigma.vercel.app/addcart/${id}`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            inddata,
-          }),
-          credentials: "include",
-        }
-      );
-
-      const data1 = await check.json();
-
-      if (check.status === 401 || !data1) {
-        alert("user invalid");
-      } else {
-        setAccount(data1);
-        history("/buynow");
+    const check = await fetch(
+      `https://amazon-server-sigma.vercel.app/addcart/${id}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          inddata,
+        }),
+        credentials: "include",
       }
-    } catch (error) {
-      console.error("Error adding to cart:", error);
+    );
+
+    const data1 = await check.json();
+
+    if (check.status === 401 || !data1) {
+      alert("user invalid");
+    } else {
+      setAccount(data1);
+      history("/buynow");
     }
   };
 
