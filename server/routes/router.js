@@ -71,9 +71,11 @@ router.post("/login", async (req, res) => {
       } else {
         const token = await userlogin.generateAuthToken();
 
-        res.cookie("Amazonweb", token, {
+        res.cookie("eccomerce", token, {
           expires: new Date(Date.now() + 2589000),
           httpOnly: true,
+          secure: process.env.NODE_ENV === "production", // Only use secure cookies in production
+          sameSite: "none",
         });
         res.status(201).json(userlogin);
       }

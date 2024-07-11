@@ -4,7 +4,7 @@ const secretKey = process.env.KEY;
 
 const authenticate = async (req, res, next) => {
   try {
-    const token = req.cookies.Amazonweb;
+    const token = req.cookies.eccomerce;
     if (!token) {
       throw new Error("No token provided");
     }
@@ -26,7 +26,7 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch (error) {
-    res.status(401).send("Unauthorized: No token provided");
+    res.status(401).send({ error: "Unauthorized no token provided" });
     console.log(error.message);
   }
 };
