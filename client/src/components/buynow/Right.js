@@ -1,6 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const Right = () => {
+const Right = ({ iteam }) => {
+  const [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    totalAmount();
+  }, [iteam]);
+
+  const totalAmount = () => {
+    let price = 0;
+    iteam.map((item) => {
+      price = item.price.cost + price;
+    });
+    setPrice(price);
+  };
+
   return (
     <div className="right_buy">
       <img
@@ -13,8 +27,10 @@ const Right = () => {
           Select this options at checkout. Details
         </span>
         <h3>
-          Subtotal (1 items):{" "}
-          <strong style={{ fontWeight: 700, color: "#111" }}>₹4049.00</strong>
+          Subtotal ({iteam.length} items):{" "}
+          <strong style={{ fontWeight: 700, color: "#111" }}>
+            ₹{price}.00
+          </strong>
         </h3>
         <button className="rightbuy_btn">Proceed to Buy</button>
         <div className="emi">Emi Available</div>
