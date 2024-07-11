@@ -17,6 +17,10 @@ app.use(router);
 
 const port = 8005;
 
+app.use("/", (req, res) => {
+  res.json("Hello! from express app");
+});
+
 app.listen(port, () => {
   console.log(`server is running on ${port}`);
 });
