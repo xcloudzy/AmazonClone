@@ -17,7 +17,7 @@ app.use(router);
 
 const port = 8005;
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   res.json("Hello! from express app");
 });
 
