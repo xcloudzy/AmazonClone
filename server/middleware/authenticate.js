@@ -6,7 +6,7 @@ const authenticate = async (req, res, next) => {
   try {
     const token = req.cookies.Amazonweb;
     if (!token) {
-      throw new Error("No token provided");
+      return res.status(401).send("Unauthorized: No token provided");
     }
 
     const verifyToken = jwt.verify(token, secretKey);
@@ -17,7 +17,7 @@ const authenticate = async (req, res, next) => {
     });
 
     if (!rootUser) {
-      throw new Error("User not found");
+      return res.status(401).send("Unauthorized: User not found");
     }
 
     req.token = token;
@@ -26,7 +26,11 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch (error) {
-    res.status(401).send("Unauthorized: No token provided");
+    if (error.name === "JsonWebTokenError") {
+      res.status(401).send("Unauthorized: Invalid token");
+    } else {
+      res.status(401).send("Unauthorized: " + error.message);
+    }
     console.log(error);
   }
 };
