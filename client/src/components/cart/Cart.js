@@ -13,26 +13,28 @@ const Cart = () => {
 
   const [inddata, setInddata] = useState([]);
 
-  console.log(inddata);
   const getinddata = async () => {
-    const res = await fetch(
-      `https://amazon-server-sigma.vercel.app/getproductsone/${id}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    const data = await res.json();
+    try {
+      const res = await fetch(
+        `https://amazon-server-sigma.vercel.app/getproductsone/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
 
-    if (res.status !== 201) {
-      console.log("no data available");
-    } else {
-      // console.log("getdata");
-      setInddata(data);
+      if (res.status !== 201) {
+        console.log("no data available");
+      } else {
+        setInddata(data);
+      }
+    } catch (error) {
+      console.error("Error fetching product data:", error);
     }
   };
 
@@ -42,29 +44,32 @@ const Cart = () => {
 
   // add cart function
   const addtocart = async (id) => {
-    const check = await fetch(
-      `https://amazon-server-sigma.vercel.app/addcart/${id}`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          inddata,
-        }),
-        credentials: "include",
+    try {
+      const check = await fetch(
+        `https://amazon-server-sigma.vercel.app/addcart/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            inddata,
+          }),
+          credentials: "include",
+        }
+      );
+
+      const data1 = await check.json();
+
+      if (check.status === 401 || !data1) {
+        alert("user invalid");
+      } else {
+        setAccount(data1);
+        history("/buynow");
       }
-    );
-
-    const data1 = await check.json();
-
-    if (check.status === 401 || !data1) {
-      alert("user invalid");
-    } else {
-      // alert("data added in your cart");
-      setAccount(data1);
-      history("/buynow");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
     }
   };
 
