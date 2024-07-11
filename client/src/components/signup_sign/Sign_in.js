@@ -6,17 +6,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { Logincontext } from "../context/ContextProvider";
 
 const Sign_in = () => {
+  const { account, setAccount } = useContext(Logincontext);
+
   const [logdata, setData] = useState({
     email: "",
     password: "",
   });
 
-  const { account, setAccount } = useContext(Logincontext);
-
   const adddata = (e) => {
     const { name, value } = e.target;
-    setData(() => {
+    setData((pre) => {
       return {
+        ...pre,
         ...logdata,
         [name]: value,
       };
@@ -27,31 +28,35 @@ const Sign_in = () => {
     e.preventDefault();
     const { email, password } = logdata;
 
-    const res = await fetch("https://amazon-server-sigma.vercel.app/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (res.status === 400 || !data) {
-      toast.error("Invalid Details 👎!", {
-        position: "top-center",
-        autoClose: 300,
+    try {
+      const res = await fetch("https://amazon-server-sigma.vercel.app/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
-    } else {
-      setData({ ...logdata, email: "", password: "" });
-      setAccount(data);
-      toast.success("Login Successfull 😃!", {
-        position: "top-center",
-        autoClose: 300,
-      });
+
+      const data = await res.json();
+
+      if (res.status === 400 || !data) {
+        toast.error("Invalid Details 👎!", {
+          position: "top-center",
+          autoClose: 300,
+        });
+      } else {
+        setAccount(data);
+        setData({ ...logdata, email: "", password: "" });
+        toast.success("Login Successfull 😃!", {
+          position: "top-center",
+          autoClose: 300,
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

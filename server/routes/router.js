@@ -81,7 +81,7 @@ router.post("/login", async (req, res) => {
       res.status(400).json({ error: "user not exist" });
     }
   } catch (error) {
-    res.status(400).json({ error: "invalid crediential pass" });
+    return res.status(400).json({ error: "invalid crediential pass" });
   }
 });
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./signup.css";
 import { NavLink } from "react-router-dom";
+import { Divider } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,8 +17,9 @@ const Sign_up = () => {
   const adddata = (e) => {
     const { name, value } = e.target;
 
-    setUdata(() => {
+    setUdata((pre) => {
       return {
+        ...pre,
         ...udata,
         [name]: value,
       };
@@ -28,40 +30,47 @@ const Sign_up = () => {
     e.preventDefault();
     const { fname, email, mobile, password, cpassword } = udata;
 
-    const res = await fetch("https://amazon-server-sigma.vercel.app/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fname,
-        email,
-        mobile,
-        password,
-        cpassword,
-      }),
-    });
+    try {
+      const res = await fetch(
+        "https://amazon-server-sigma.vercel.app/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fname,
+            email,
+            mobile,
+            password,
+            cpassword,
+          }),
+        }
+      );
 
-    const data = await res.json();
-    // console.log(data);
-    if (res.status === 422 || !data) {
-      toast.error("Invalid Details 👎!", {
-        position: "top-center",
-        autoClose: 300,
-      });
-    } else {
-      setUdata({
-        ...udata,
-        fname: "",
-        email: "",
-        mobile: "",
-        password: "",
-        cpassword: "",
-      });
-      toast.success("Registration Successfully done 😃!", {
-        position: "top-center",
-        autoClose: 300,
-      });
+      const data = await res.json();
+      // console.log(data);
+      if (res.status === 422 || !data) {
+        toast.error("Invalid Details 👎!", {
+          position: "top-center",
+          autoClose: 300,
+        });
+      } else {
+        setUdata({
+          ...udata,
+          fname: "",
+          email: "",
+          mobile: "",
+          password: "",
+          cpassword: "",
+        });
+        toast.success("Registration Successfully done 😃!", {
+          position: "top-center",
+          autoClose: 300,
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -132,6 +141,7 @@ const Sign_up = () => {
             <button className="signin_btn" onClick={senddata}>
               Continue
             </button>
+            <Divider />
             <div className="signin_info">
               <p>Already have an account?</p>
               <NavLink to="/login">Sign In</NavLink>
