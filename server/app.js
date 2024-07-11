@@ -17,6 +17,13 @@ app.use(router);
 
 const port = 8005;
 
+const corsOptions = {
+  origin: "https://cloudamazon.vercel.app",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 app.get("*", (req, res, next) => {
   res.status(200).json({
     message: "Connected to vercel app",
