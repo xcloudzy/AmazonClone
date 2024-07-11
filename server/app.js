@@ -10,39 +10,36 @@ const DefaultData = require("./defaultdata");
 const cors = require("cors");
 const router = require("./routes/router");
 
-app.use(express.json());
-app.use(cookieParser(""));
-app.use(cors());
-app.use(router);
-
 const port = 8005;
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://cloudamazon.vercel.app");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
-
+// CORS configuration
 const corsOptions = {
   origin: "https://cloudamazon.vercel.app",
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
+// Middleware
+app.use(express.json());
+app.use(cookieParser(""));
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Preflight requests
 
-app.get("*", (req, res, next) => {
+// Routes
+app.use(router);
+
+// Test route
+app.get("*", (req, res) => {
   res.status(200).json({
     message: "Connected to vercel app",
   });
 });
 
+// Start the server
 app.listen(port, () => {
-  console.log(`server is running on ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
 
+// Initialize default data
 DefaultData();
