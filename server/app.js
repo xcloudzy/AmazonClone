@@ -17,10 +17,11 @@ app.use(router);
 
 const port = 8005;
 
-app.get("/", (req, res) => {
-  res.json("Hello! from express app");
+app.get("*", (req, res, next) => {
+  res.status(200).json({
+    message: "bad request",
+  });
 });
-
 app.listen(port, () => {
   console.log(`server is running on ${port}`);
 });
