@@ -31,7 +31,7 @@ const Buynow = () => {
 
   useEffect(() => {
     getdatabuy();
-  }, [data]);
+  }, []);
 
   return (
     <>
