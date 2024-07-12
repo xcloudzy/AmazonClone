@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: ["https://cloudamazon.vercel.app"],
-    methods: ["POST", "GET"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
